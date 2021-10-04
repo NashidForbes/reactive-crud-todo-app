@@ -1,0 +1,72 @@
+@startuml
+class com.quicktutorialz.nio.entities.ToDo {
+- String id
+- String title
+- String description
+- LocalDate date
++ String getId()
++ String getTitle()
++ void setTitle(String)
++ String getDescription()
++ void setDescription(String)
++ LocalDate getDate()
++ boolean equals(Object)
++ int hashCode()
+}
+class com.quicktutorialz.nio.entities.ResponseDto {
+- int status
+- Object response
+- Date datetime
+}
+interface com.quicktutorialz.nio.daos.v2.ToDoDao {
+~ Observable<ToDo> create(ToDoDto)
+~ Observable<Optional<ToDo>> read(String)
+~ Observable<List<ToDo>> readAll()
+~ Observable<Optional<ToDo>> update(ToDo)
+~ Observable<Boolean> delete(String)
+}
+interface com.quicktutorialz.nio.daos.v1.ToDoDao {
+~ ToDo create(ToDoDto)
+~ Optional<ToDo> read(String)
+~ List<ToDo> readAll()
+~ Optional<ToDo> update(ToDo)
+~ Boolean delete(String)
+}
+class com.quicktutorialz.nio.entities.ToDoDto {
+- String title
+- String description
++ String getTitle()
++ void setTitle(String)
++ String getDescription()
++ void setDescription(String)
++ boolean equals(Object)
++ int hashCode()
+}
+class com.quicktutorialz.nio.daos.v2.ToDoDaoImpl {
+~ Map<String,ToDo> toDos
+- {static} ToDoDao instance
++ {static} ToDoDao getInstance()
++ Observable<ToDo> create(ToDoDto)
++ Observable<Optional<ToDo>> read(String)
++ Observable<List<ToDo>> readAll()
++ Observable<Optional<ToDo>> update(ToDo)
++ Observable<Boolean> delete(String)
+- void initializeDB()
+- ToDo updateToDo(ToDo,ToDoDto)
+}
+class com.quicktutorialz.nio.daos.v1.ToDoDaoImpl {
+~ Map<String,ToDo> toDos
+- {static} ToDoDao instance
++ {static} ToDoDao getInstance()
++ ToDo create(ToDoDto)
++ Optional<ToDo> read(String)
++ List<ToDo> readAll()
++ Optional<ToDo> update(ToDo)
++ Boolean delete(String)
+- void initializeDB()
+}
+
+
+com.quicktutorialz.nio.daos.v2.ToDoDao <|.. com.quicktutorialz.nio.daos.v2.ToDoDaoImpl
+com.quicktutorialz.nio.daos.v1.ToDoDao <|.. com.quicktutorialz.nio.daos.v1.ToDoDaoImpl
+@enduml
