@@ -1,6 +1,6 @@
 package com.quicktutorialz.nio.entities;
 
-import java.util.Date;
+ import java.util.Date;
 
 /**
  * @author alessandroargentieri
@@ -19,4 +19,6 @@ public class ResponseDto {
         this.response = response;
         this.datetime = new Date();
     }
+
+
 }
