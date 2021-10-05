@@ -55,10 +55,9 @@ public class ToDoEndpoints extends Endpoints {
     @Api(path = "/api/v1/delete/{id}", method = "GET", produces = "application/json", description = "")
     Action deleteToDo = (HttpServletRequest req, HttpServletResponse resp) -> {
         String id = getPathVariables(req).get("id");
-        Optional<ToDo> outPut = toDoDao.read(id);
 
-        toJsonResponse(req, resp, new ResponseDto(200, outPut.isPresent() ?
-                toDoDao.delete(id) : "todo not deleted"));
+        toJsonResponse(req, resp, new ResponseDto(200, toDoDao.delete(id) ?
+                "toDoDao deleted " + id : "todo not deleted"));
     };
 
     public ToDoEndpoints() {
@@ -66,6 +65,6 @@ public class ToDoEndpoints extends Endpoints {
         setEndpoint("/api/v1/read/{id}", readToDo);
         setEndpoint("/api/v1/read", readAllToDos);
         setEndpoint("/api/v1/update", updateToDo);
-        setEndpoint("/api/v1/delete", deleteToDo);
+        setEndpoint("/api/v1/delete/{id}", deleteToDo);
     }
 }
