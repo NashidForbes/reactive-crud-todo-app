@@ -11,6 +11,8 @@ import com.quicktutorialz.nio.entities.ToDoDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Optional;
 
 public class ToDoEndpoints extends Endpoints {
 
@@ -24,16 +26,41 @@ public class ToDoEndpoints extends Endpoints {
         ToDo outPut = toDoDao.create(input);
         toJsonResponse(req, resp, new ResponseDto(200, outPut));
     };
+
     @Api(path = "/api/v1/read/{id}", method = "GET", produces = "application/json", description = "")
-    Action readToDo = (HttpServletRequest req, HttpServletResponse resp) -> {};
+    Action readToDo = (HttpServletRequest req, HttpServletResponse resp) -> {
+        String id = getPathVariables(req).get("id");
+        Optional<ToDo> outPut = toDoDao.read(id);
+
+        toJsonResponse(req, resp, new ResponseDto(200, outPut.isPresent() ?
+                outPut.get() : "todo not found"));
+    };
+
     @Api(path = "/api/v1/read", method = "GET", produces = "application/json", description = "")
-    Action readAllToDos = (HttpServletRequest req, HttpServletResponse resp) -> {};
+    Action readAllToDos = (HttpServletRequest req, HttpServletResponse resp) -> {
+        List<ToDo> outPutAll = toDoDao.readAll();
+
+        toJsonResponse(req, resp, new ResponseDto(200, outPutAll));
+    };
+
     @Api(path = "/api/v1/update", method = "POST", consumes = "application/json", produces = "application/json",
             description = "")
-    Action updateToDo = (HttpServletRequest req, HttpServletResponse resp) -> {};
+    Action updateToDo = (HttpServletRequest req, HttpServletResponse resp) -> {
+         ToDo input = (ToDo) getDataFromJsonBodyRequest(req, ToDo.class);
+
+         Optional<ToDo> outPut = toDoDao.update(input);
+         toJsonResponse(req, resp, new ResponseDto(200, outPut.isPresent() ? outPut.get() : "to not updated"));
+    };
+
     @Api(path = "/api/v1/delete/{id}", method = "GET", produces = "application/json", description = "")
-    Action deleteToDo = (HttpServletRequest req, HttpServletResponse resp) -> {};
-    
+    Action deleteToDo = (HttpServletRequest req, HttpServletResponse resp) -> {
+        String id = getPathVariables(req).get("id");
+        Optional<ToDo> outPut = toDoDao.read(id);
+
+        toJsonResponse(req, resp, new ResponseDto(200, outPut.isPresent() ?
+                toDoDao.delete(id) : "todo not deleted"));
+    };
+
     public ToDoEndpoints() {
         setEndpoint("/api/v1/create", createToDo);
         setEndpoint("/api/v1/read/{id}", readToDo);
